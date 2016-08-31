@@ -1,0 +1,11 @@
+[Unit]
+Description=Kentik Proxy Aggent to act as a Netflow tarket and sends combined kflow to Kentik Data Engine over SSL VPN Tunnel
+Documentation=man:chfagent(1)
+
+[Service]
+Type=simple
+ExecStart=chfagent -api_email=${chfagent-email} -api_token=${chfagent-token} -type=proxy -host=${chfagent-ip}
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
