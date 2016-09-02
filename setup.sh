@@ -109,9 +109,10 @@ if [[ -e "chfagent_rhel_7-latest-1.x86_64.rpm" ]]; then
 rm ./chfagent_rhel_7-latest-1.x86_64.rpm
 fi
 
+eval systemctl enable chfagent
+
+eval systemctl start chfagent
+
 echo ""
 echo "The Kentik Proxy Agent, chfagent, systemd startup script completed.  Starting Proxy Agent..."
-
 echo ""
-
-eval systemctl enable chfagent
