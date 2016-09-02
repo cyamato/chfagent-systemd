@@ -1,0 +1,6 @@
+[Unit]
+Description=Display failure notices
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/chfagent-failure-notice.sh %I "Hostname: %H" "Machine ID: %m" "Boot ID: %b"
