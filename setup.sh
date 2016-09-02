@@ -19,12 +19,16 @@ fi
 else
 
 if [[ -e "/etc/os-release" ]]; then
+
 if [[ $(grep -Eom1 '[0-9]' /etc/os-release | grep -Eom1 [0-9]) == "8" ]]; then
-echo "Debain 8"
 chfagent_dir="/lib/systemd/system/"
 proxy_Local="/usr/bin/chfagent"
 proxy_dl_url="https://kentik.com/packages/builds/debian/8/chfagent-jessie_latest_amd64.deb"
+
+else
+echo "Sorry only version 8 of Debian is supported by this script"
 fi
+
 fi
 fi
 
