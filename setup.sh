@@ -48,8 +48,11 @@ if [[ -e "/etc/redhat-release" ]]; then
         fi
         
         if [[ $chfagentCheck == 0 ]]; then 
+            if [[ -e $packageName ]]; then
+                rm $packageName
+            fi
             wget $proxy_dl_url
-            yum install chfagent_rhel_7-latest-1.x86_64.rpm
+            rpm --install $packageName
         fi
     else
         echo "Sorry only verson 7 of RHEL/CentOS is supported by this script"
@@ -59,11 +62,8 @@ if [[ -e "/etc/redhat-release" ]]; then
 else
 
     if [[ -e "/etc/os-release" ]]; then
-    
         if [[ $(grep -Eom1 'NAME="Debian' /etc/os-release) == 'NAME="Debian' ]]; then
-        
             if [[ $(grep -Eom1 'VERSION="[0-9]?[0-9]?.?[0-9]?[0-9]' /etc/os-release | grep -Eom1 '[0-9][0-9]?.?[0-9]?[0-9]?') == "8" ]]; then
-            
                 OS="debian"
                 systemd_dir="/lib/systemd/system/"
                 proxy_Local="/usr/bin/chfagent"
@@ -75,16 +75,16 @@ else
                 fi
             
                 if [[ $chfagentCheck == 0 ]]; then 
+                    if [[ -e $packageName ]]; then
+                        rm $packageName
+                    fi
                     wget $proxy_dl_url
-                    apt-get install chfagent-jessie_latest_amd64.deb
+                    dpkg -i $packageName
                 fi
-            
             else
                 echo "Sorry only version 8 of Debian is supported by this script"
             fi
-        
         else
-        
             if [[ $(grep -Eom1 'NAME="Ubuntu' /etc/os-release) == 'NAME="Ubuntu' ]]; then
                 if [[ $(grep -Eom1 'VERSION="[0-9]?[0-9]?.?[0-9]?[0-9]' /etc/os-release | grep -Eom1 '[0-9][0-9]?.?[0-9]?[0-9]?') == "14.04" ]]; then
                 
@@ -99,10 +99,12 @@ else
                     fi
                 
                     if [[ $chfagentCheck == 0 ]]; then 
+                        if [[ -e $packageName ]]; then
+                            rm $packageName
+                        fi
                         wget $proxy_dl_url
-                        apt-get install chfagent-trusty_latest_amd64.deb
+                        dpkg -i $packageName
                     fi
-                        
                 else
                     echo "Sorry only version 14.04 of Ubuntu is supported by this script"
                 fi
@@ -130,7 +132,12 @@ do
 done
 
 echo "Your server is curently configured with the following IP(s):"
-ifconfig | awk -F "[: ]+" '/inet / { print $3 }'
+if [[ $os == 'rhel' ]]; then
+    ifconfig | awk -F "[: ]+" '/inet / { print $3 }'
+else
+    ifconfig | grep -Eo 'inet addr:[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?' | grep -Eo '[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?'
+fi
+
 
 read -r -p "Please enter the ip address Kentik Proxy Agent will use, with the IP address 0.0.0.0 the proxy will be accessabule on all IPs used by this server [0.0.0.0]" ip
 
