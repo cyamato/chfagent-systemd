@@ -2,7 +2,7 @@
 Kentik Proxy Agent startup script for systemd on **RHEL/CentOS v7, Debian v8, & Ubuntu v14.04**
 
 This script will install wget & chfagent if needed using the local standard package manager (yum/apt | rpm/dpkg)  
-It will create the needed SystemD files and local proxy configuration and make calls to systemctl to install the SystemD chfagent scripts at boot up.  This configuration will also set chfagent to restart it self in case of failure every 60s.  Please note that if you do not currently have nay devices configured the Proxy Agent will fail and restart every 60s until there is at least one device configured in the Kentik Portal.  
+It will create the needed systemd files and local proxy configuration.  It will also make needed calls to systemctl to start chfagent at boot up.  chfagent will restart it self in case of failure every 60s.  Please note that if you do not currently have nay devices configured the Proxy Agent will fail and restart every 60s until there is at least one device configured in the Kentik Portal.  
 
 You will need the email address, api key for the Kentik Portal account you wish the Proxy to use as well the IP address it should be attached.  Note that 0.0.0.0 will cause the proxy to attach to all address.  The default port of 9995 is used by this script.
 
