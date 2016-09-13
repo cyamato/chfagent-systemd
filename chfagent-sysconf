@@ -1,0 +1,5 @@
+# Configuration file for the chfagent service.
+
+email='kentikpa01@ea.com'
+token='ef710030111ad4503dd88a3bbab618fd'
+host='0.0.0.0'
