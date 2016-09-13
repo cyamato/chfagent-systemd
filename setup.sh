@@ -56,6 +56,7 @@ if [[ -e "/etc/redhat-release" ]]; then
         fi
     else
         echo "Sorry only verson 7 of RHEL/CentOS is supported by this script"
+        exit 0
     fi
 
 # Debian
@@ -83,6 +84,7 @@ else
                 fi
             else
                 echo "Sorry only version 8 of Debian is supported by this script"
+                exit 0
             fi
         else
             if [[ $(grep -Eom1 'NAME="Ubuntu' /etc/os-release) == 'NAME="Ubuntu' ]]; then
@@ -107,11 +109,13 @@ else
                     fi
                 else
                     echo "Sorry only version 14.04 of Ubuntu is supported by this script"
+                    exit 0
                 fi
             fi
         fi
     else
         echo "Sorry this linux distrobution and or version is not curently supported by this script"
+        exit 0
     fi
 fi
 
