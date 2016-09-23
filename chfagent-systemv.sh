@@ -1,10 +1,6 @@
 #!/bin/bash
 #
-#       /etc/rc.d/init.d/
-#
-#
-#
-#
+# /etc/rc.d/init.d/
 #
 # Source function library.
 . /etc/init.d/functions
