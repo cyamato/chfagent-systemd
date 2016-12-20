@@ -163,10 +163,31 @@ else
                 ;;
             'NAME="Ubuntu"')
                 case $(grep -Eom1 'VERSION="[0-9]?[0-9]?.?[0-9]?[0-9]' /etc/os-release | grep -Eom1 '[0-9][0-9]?.?[0-9]?[0-9]?') in
+                    "16.04")
+                        echo "Ubuntu 16.04"
+                        OS="ubuntu"
+                        init="systemd"
+                        systemd_dir="/lib/systemd/system/"
+                        proxy_Local="/usr/bin/chfagent"
+                        proxy_dl_url="https://kentik.com/packages/builds/ubuntu/16.04/chfagent-xenial_latest_amd64.deb"
+                        packageName="chfagent-xenial_latest_amd64.deb"
+                        
+                        if [[ $wgetCheck == 0 ]]; then
+                            apt-get install wget
+                        fi
+                    
+                        if [[ $chfagentCheck == 0 ]]; then 
+                            if [[ -e $packageName ]]; then
+                                rm $packageName
+                            fi
+                            wget $proxy_dl_url
+                            dpkg -i $packageName
+                        fi
+                        ;;
                     "14.04")
                         echo "Ubuntu 14.04"
                         OS="ubuntu"
-                        init="systemd"
+                        init="systemv"
                         systemd_dir="/lib/systemd/system/"
                         proxy_Local="/usr/bin/chfagent"
                         proxy_dl_url="https://kentik.com/packages/builds/ubuntu/14.04/chfagent-trusty_latest_amd64.deb"
