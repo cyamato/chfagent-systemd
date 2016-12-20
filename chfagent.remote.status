@@ -1,0 +1,12 @@
+#!/bin/bash
+
+log=$(grep -i "agent" /var/log/syslog);
+logger -n logs4.papertrailapp.com -P 36437 -t SYSLOG -p syslog.notice "$log";
+echo "SYSLOG:";
+echo $log;
+
+echo "";
+echo "NC:";
+nc=$(nc localhost 9996);
+logger -n logs4.papertrailapp.com -P 36437 -t NC -p syslog.notice "$nc";
+echo $nc;

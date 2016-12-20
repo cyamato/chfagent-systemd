@@ -1,0 +1,63 @@
+#!/bin/bash
+
+Red='\033[0;31m'
+Green='\033[0;32m'
+Cyan='\033[0;36m'
+Yellow='\033[1;33m'
+White='\033[1;37m'
+NC='\033[0m'
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+echo -e "${Cyan}Select network interface to capture from ${White}";
+array=($(ls /sys/class/net));
+array=("any" "${array[@]}");
+
+select ifs in "${array[@]}"
+do
+        break;
+done
+
+echo "";
+echo -e "${Cyan}Select capture type ${White}";
+options=("Flow" "CHFAgent" "BGP" "SNMP" "ALL" "Custom Filter");
+select opt in "${options[@]}"
+do
+        case $opt in
+                "Flow")
+                        filter="port 20013";
+                        break;
+                        ;;
+                "CHFAgent")
+                        filter="port 9995";
+                        break;
+                        ;;
+                "BGP")
+                        filter="port 179";
+                        break;
+                        ;;
+                "SNMP")
+                        filter="port 161";
+                        break;
+                        ;;
+                "ALL")
+                        filter="";
+                        break;
+                        ;;
+                "Custom Filter")
+                        echo"#? ";
+                        read filter;
+                        break;
+                        ;;
+                *)
+                        echo "Invalid option";
+                        ;;
+        esac
+done
+
+filename="$HOSTNAME.$RANDOM.pcap"
+
+echo -e "";
+echo -e "${Green}Caprturing $filter on $ifs as ${bold}$filename${normal} ${Yellow}";
+tcpdump $filter -c 10 -i $ifs  -w - | curl -X PUT --upload-file - https://www.cloudshark.org/api/v1/66cfc108b9b56c5cae33d8eea64abbf7/upload\?filename=$filename
+echo -e "${NC}";

@@ -32,12 +32,18 @@ case "$1" in
     logs)
         cat /var/log/syslog
         ;;
+    support_health)
+        /usr/bin/chfagent.remote.status
+        ;;
+    support_capture)
+        /usr/bin/chfagent.remote.capture
+        ;;
     restart)
         stop
         start
         ;;
     *)
-        echo "Usage: {start|stop|status|logs|restart}"
+        echo "Usage: {start|stop|status|logs|support_health|support_capture|restart}"
         exit 1
         ;; esac
 exit $?

@@ -9,7 +9,8 @@
 proxy_Local="/usr/bin/chfagent"
 url_chfagentServic="https://raw.githubusercontent.com/cyamato/chfagent-systemd/master/chfagent.service"
 url_chfagentSystemv="https://raw.githubusercontent.com/cyamato/chfagent-systemd/master/chfagent-systemv.sh"
-url_chfagentServicStatus="https://raw.githubusercontent.com/cyamato/chfagent-systemd/master/chfagentstatus"
+url_chfagentServicStatus="https://raw.githubusercontent.com/cyamato/chfagent-systemd/master/chfagent.remote.status"
+url_chfagentCapture="https://raw.githubusercontent.com/cyamato/chfagent-systemd/master/chfagent.remote.capture"
 
 
 # Make sure user is running with root
@@ -305,8 +306,6 @@ if [[ $init == "systemd" ]]; then
     
     wget -O $localFile $url_chfagentServic
     
-    wget -O /usr/bin/ $url_chfagentServicStatus
-    
     if [ ! -d "${systemd_dir}chfagent.service.d/" ]; then
         mkdir ${systemd_dir}chfagent.service.d/
     fi
@@ -357,6 +356,11 @@ if [[ $init == "systemv" ]]; then
     
     service chfagent start
 fi
+
+wget -O /usr/bin/ $url_chfagentCapture
+chmod u+x /usr/bin/chfagentstatus
+wget -O /usr/bin/ $url_chfagentServicStatus
+chmod u+x /usr/bin/chfagentcapture
 
 echo ""
 echo "The Kentik Proxy Agent, chfagent, startup script completed.  Starting Proxy Agent..."
