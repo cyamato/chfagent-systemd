@@ -9,6 +9,8 @@
 proxy_Local="/usr/bin/chfagent"
 url_chfagentServic="https://raw.githubusercontent.com/cyamato/chfagent-systemd/master/chfagent.service"
 url_chfagentSystemv="https://raw.githubusercontent.com/cyamato/chfagent-systemd/master/chfagent-systemv.sh"
+url_chfagentServicStatus="https://raw.githubusercontent.com/cyamato/chfagent-systemd/master/chfagentstatus"
+
 
 # Make sure user is running with root
 if [ ! "$(whoami)" == 'root' ]; then
@@ -303,6 +305,8 @@ if [[ $init == "systemd" ]]; then
     
     wget -O $localFile $url_chfagentServic
     
+    wget -O /usr/bin/ $url_chfagentServicStatus
+    
     if [ ! -d "${systemd_dir}chfagent.service.d/" ]; then
         mkdir ${systemd_dir}chfagent.service.d/
     fi
@@ -336,6 +340,10 @@ if [[ $init == "systemv" ]]; then
     if [ ! -d "/etc/sysconfig/" ]; then
         mkdir /etc/sysconfig/
     fi 
+    
+    if [ ! -d "/var/lock/subsys/" ]; then
+        mkdir /var/lock/subsys/
+    fi
     
     if [ -e "/etc/sysconfig/chfagent" ]; then
         rm /etc/sysconfig/chfagent
