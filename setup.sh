@@ -353,3 +353,5 @@ fi
 echo ""
 echo "The Kentik Proxy Agent, chfagent, startup script completed.  Starting Proxy Agent..."
 echo ""
+
+nc localhost 9996
