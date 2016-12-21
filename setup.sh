@@ -358,9 +358,9 @@ if [[ $init == "systemv" ]]; then
 fi
 
 wget -O /usr/bin/ $url_chfagentCapture
-chmod u+x /usr/bin/chfagentstatus
+chmod u+x /usr/bin/${url_chfagentCapture}
 wget -O /usr/bin/ $url_chfagentServicStatus
-chmod u+x /usr/bin/chfagentcapture
+chmod u+x /usr/bin/${url_chfagentServicStatus}
 
 echo ""
 echo "The Kentik Proxy Agent, chfagent, startup script completed.  Starting Proxy Agent..."
