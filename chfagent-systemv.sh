@@ -30,7 +30,7 @@ case "$1" in
         nc localhost 9996
         ;;
     logs)
-        cat /var/log/syslog
+        grep -i "chfagent" /var/log/syslog
         ;;
     support_health)
         /usr/bin/chfagent.remote.status

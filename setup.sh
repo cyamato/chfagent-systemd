@@ -5,6 +5,16 @@
 # url: https://github.com/cyamato/chfagent-systemd
 # License: GPLv3
 
+# Colors
+Red='\033[0;31m'
+Green='\033[0;32m'
+Cyan='\033[0;36m'
+Yellow='\033[1;33m'
+White='\033[1;37m'
+NC='\033[0m'
+bold=$(tput bold)
+normal=$(tput sgr0)
+
 # setup common vars
 proxy_Local="/usr/bin/chfagent"
 url_chfagentServic="https://raw.githubusercontent.com/cyamato/chfagent-systemd/master/chfagent.service"
@@ -15,24 +25,24 @@ url_chfagentCapture="https://raw.githubusercontent.com/cyamato/chfagent-systemd/
 
 # Make sure user is running with root
 if [ ! "$(whoami)" == 'root' ]; then
-    echo "This script must be executed as root or with sudo"
+    echo "${Red}This script must be executed as root or with sudo${NC}"
     exit 0
 fi
 
 # Check for dependancies
-echo "Checking for dependancies"
+echo "${Green}Checking for dependancies${NC}"
 
 # wget
 wgetCheck=1
 if [[ $(hash wget) ]]; then 
-    echo "Your system does not have wget.  We will call your package manager to install it for you"
+    echo "${Yellow}Your system does not have wget.  We will call your package manager to install it for you ${NC}"
     wgetCheck=0
 fi
 
 # chfagent
 chfagentCheck=1
 if [[ ! -e $proxy_Local ]]; then
-    echo "Kentik Proxy Agent not found on system.  We will call your package manager to install it for you"
+    echo "${Yellow}Kentik Proxy Agent not found on system.  We will call your package manager to install it for you ${NC}"
     chfagentCheck=0
 fi
 
@@ -44,7 +54,7 @@ if [[ -e "/etc/redhat-release" ]]; then
     case $(grep -Eom1 '[0-9]' /etc/redhat-release | grep -Eom1 '[0-9]') in
     
         "5")
-            echo "RHEL 5"
+            echo "${Green}RHEL 5"
             OS="rhel"
             init="systemv"
             systemd_dir="/etc/systemd/system/"
@@ -64,7 +74,7 @@ if [[ -e "/etc/redhat-release" ]]; then
             fi
             ;;
         "6")
-            echo "RHEL 6"
+            echo "${Green}RHEL 6"
             OS="rhel"
             init="systemv"
             systemd_dir="/etc/systemd/system/"
@@ -84,7 +94,7 @@ if [[ -e "/etc/redhat-release" ]]; then
             fi
             ;;
         "7")
-            echo "RHEL 7"
+            echo "${Green}RHEL 7"
             OS="rhel"
             init="systemd"
             systemd_dir="/etc/systemd/system/"
@@ -104,7 +114,7 @@ if [[ -e "/etc/redhat-release" ]]; then
             fi
             ;;
         *)
-            echo "Sorry only versons 5, 6, and 7 of RHEL/CentOS is supported by this script"
+            echo "${Red}Sorry only versons 5, 6, and 7 of RHEL/CentOS is supported by this script"
             exit 0
             ;;
     esac
@@ -117,7 +127,7 @@ else
             'NAME="Debian"')
                 case $(grep -Eom1 'VERSION="[0-9]?[0-9]?.?[0-9]?[0-9]' /etc/os-release | grep -Eom1 '[0-9][0-9]?.?[0-9]?[0-9]?') in
                     "8")
-                        echo "Debian 8"
+                        echo "${Green}Debian 8"
                         OS="debian"
                         init="systemd"
                         systemd_dir="/lib/systemd/system/"
@@ -138,7 +148,7 @@ else
                         fi
                         ;;
                     "7")
-                        echo "Debian 7"
+                        echo "${Green}Debian 7"
                         OS="debian"
                         init="systemv"
                         systemd_dir="/lib/systemd/system/"
@@ -159,7 +169,7 @@ else
                         fi
                         ;;
                     *)
-                        echo "Sorry only versions 7 and 8 of Debian is supported by this script"
+                        echo "${Red}Sorry only versions 7 and 8 of Debian is supported by this script"
                         exit 0
                         ;;
                 esac
@@ -167,7 +177,7 @@ else
             'NAME="Ubuntu"')
                 case $(grep -Eom1 'VERSION="[0-9]?[0-9]?.?[0-9]?[0-9]' /etc/os-release | grep -Eom1 '[0-9][0-9]?.?[0-9]?[0-9]?') in
                     "16.04")
-                        echo "Ubuntu 16.04"
+                        echo "${Green}Ubuntu 16.04"
                         OS="ubuntu"
                         init="systemd"
                         systemd_dir="/lib/systemd/system/"
@@ -188,7 +198,7 @@ else
                         fi
                         ;;
                     "14.04")
-                        echo "Ubuntu 14.04"
+                        echo "${Green}Ubuntu 14.04"
                         OS="ubuntu"
                         init="systemv"
                         systemd_dir="/lib/systemd/system/"
@@ -209,7 +219,7 @@ else
                         fi
                         ;;
                     "12.04")
-                        echo "Ubuntu 12.04"
+                        echo "${Green}Ubuntu 12.04"
                         OS="ubuntu"
                         init="systemv"
                         systemd_dir="/lib/systemd/system/"
@@ -230,7 +240,7 @@ else
                         fi
                         ;;
                     "10.04")
-                        echo "Ubuntu 10.04"
+                        echo "${Green}Ubuntu 10.04"
                         OS="ubuntu"
                         init="systemv"
                         systemd_dir="/lib/systemd/system/"
@@ -251,18 +261,18 @@ else
                         fi
                         ;;
                     *)
-                        echo "Sorry only versions 10.04, 12.04, and 14.04 of Ubuntu is supported by this script"
+                        echo "${Red}Sorry only versions 10.04, 12.04, and 14.04 of Ubuntu is supported by this script"
                         exit 0
                         ;;
                 esac
                 ;;
             *)
-                echo "Sorry this linux distrobution and or version is not curently supported by this script"
+                echo "${Red}Sorry this linux distrobution and or version is not curently supported by this script"
                 exit 0
                 ;;
         esac
     else
-        echo "Sorry this linux distrobution and or version is not curently supported by this script"
+        echo "${Red}Sorry this linux distrobution and or version is not curently supported by this script"
         exit 0
     fi
 fi
@@ -270,19 +280,19 @@ fi
 # Get chfagent proxy config info
 
 echo ""
-echo "Now setting up the Kentik Proxy Agent, chfagent, SystemD Scripts"
+echo "${Green}Now setting up the Kentik Proxy Agent, chfagent, SystemD Scripts"
 
 while [[ -z "${emailAddress// }" ]]
 do
-    read -r -p "Please enter the email address for the account the Kentik Proxy Agent will use: " emailAddress
+    read -r -p "${White}${bold}Please enter the email address for the account the Kentik Proxy Agent will use: " emailAddress
 done
 
 while [[ -z "${apiKey// }" ]]
 do
-    read -r -p "Please enter the accounts API Key: " apiKey
+    read -r -p "${White}${bold}Please enter the accounts API Key: " apiKey
 done
 
-echo "Your server is curently configured with the following IP(s):"
+echo "${White}${bold}Your server is curently configured with the following IP(s): "
 if [[ $os == 'rhel' ]]; then
     ifconfig | awk -F "[: ]+" '/inet / { print $3 }'
 else
@@ -290,11 +300,13 @@ else
 fi
 
 
-read -r -p "Please enter the ip address Kentik Proxy Agent will use, with the IP address 0.0.0.0 the proxy will be accessabule on all IPs used by this server [0.0.0.0]" ip
+read -r -p "${White}${bold}Please enter the ip address Kentik Proxy Agent will use, with the IP address 0.0.0.0 the proxy will be accessabule on all IPs used by this server [0.0.0.0]" ip
 
 if [[ -z "${ip// }" ]]; then
     ip="0.0.0.0"
 fi
+
+echo "${NC}${normal}"
 
 if [[ $init == "systemd" ]]; then
     # Install Proxy Systemd Scripts and configuration file
@@ -362,8 +374,7 @@ chmod u+x /usr/bin/${url_chfagentCapture}
 wget -O /usr/bin/ $url_chfagentServicStatus
 chmod u+x /usr/bin/${url_chfagentServicStatus}
 
-echo ""
-echo "The Kentik Proxy Agent, chfagent, startup script completed.  Starting Proxy Agent..."
+echo "${White}${bold}The Kentik Proxy Agent, chfagent, startup script completed.  Starting Proxy Agent...${NC}${normal}"
 echo ""
 
 nc localhost 9996

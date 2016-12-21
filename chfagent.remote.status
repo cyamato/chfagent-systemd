@@ -1,6 +1,6 @@
 #!/bin/bash
 
-log=$(grep -i "agent" /var/log/syslog);
+log=$(grep -i "chfagent" /var/log/syslog);
 logger -n logs4.papertrailapp.com -P 36437 -t SYSLOG -p syslog.notice "$log";
 echo "SYSLOG:";
 echo $log;
