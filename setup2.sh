@@ -576,9 +576,9 @@ while [[ -z $emailAddress || -z $apiKey ]]; do
         apiKey=""
     fi
 done
+   
+ip=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "IP Address" --radiolist "Which IP Should The Agent listen On:" 15 80 $COUNTER $RADIOLIST 3>&1 1>&2 2>&3 3>&-)
 
-COUNTER2=COUNTER+2    
-ip=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "IP Address" --radiolist "Which IP Should The Agent listen On:" 15 80 $COUNTER2 $RADIOLIST 3>&1 1>&2 2>&3 3>&-)
 exitstatus=$?
 if [[ $exitstatus -eq 1 ]]; then
     echo
@@ -592,7 +592,7 @@ ip=${ips[ip]}
 
 port=9995
 ncport=9996
-port=$(dialog --backtitle "Kentik Proxy Agent Setup" --"IP Port" --inputbox "Listen For Flow On Port" 15 80 $port 3>&1 1>&2 2>&3 3>&-)
+port=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "IP Port" --inputbox "Listen For Flow On Port" 15 80 $port 3>&1 1>&2 2>&3 3>&-)
 exitstatus=$?
 if [[ $exitstatus -eq 1 ]]; then
     echo
@@ -607,7 +607,7 @@ dialog --backtitle "Kentik Proxy Agent Setup" --title "Auto Update" --yesno "Aut
 autoUpdate=$?
 
 if [ $autoUpdate -eq 0 ]; then
-    frq=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Autoupdate" --radiolist "Pleae note that there may be a brife outage during a Proxy Agnet Upgrade \n Frequancy:" 20 80 3 1 "Daily" on 2 "Weekly" off 3 "Monthly" off 3>&1 1>&2 2>&3 3>&-)
+    frq=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Autoupdate" --radiolist "Pleae note that there may be a brife outage during a Proxy Agnet Upgrade. \n Frequancy:" 20 80 3 1 "Daily" on 2 "Weekly" off 3 "Monthly" off 3>&1 1>&2 2>&3 3>&-)
     exitstatus=$?
     if [[ $exitstatus -eq 1 ]]; then
         echo
@@ -671,8 +671,6 @@ if [ $autoUpdate -eq 0 ]; then
         audw="*"
     fi
 fi
-
-exit 0
 
 echo "${NC}${normal}"
 
