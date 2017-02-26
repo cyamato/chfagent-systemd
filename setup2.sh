@@ -559,7 +559,7 @@ apiKey=""
 exitstatus=0
 
 while [[ -z $emailAddress || -z $apiKey ]]; do
-    VALUES=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Authrization" --ok-label "Submit" --form "Proxy Authrization" 15 80 0 "eMail Address:" 1 1 "$emailAddress" 1 16 40 0 "API Key:" 3 1 "$apiKey" 3 16 40 0 3>&1 1>&2 2>&3 3>&-)
+    VALUES=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Authrization" --ok-label "Submit" --form "Please use the Up and Down Arrows to move between fileds. \nProxy Authrization:" 15 80 0 "eMail Address:" 1 1 "$emailAddress" 1 16 40 0 "API Key:" 3 1 "$apiKey" 3 16 40 0 3>&1 1>&2 2>&3 3>&-)
     exitstatus=$?
     auth=($VALUES)
     emailAddress=${auth[0]}
@@ -577,7 +577,8 @@ while [[ -z $emailAddress || -z $apiKey ]]; do
     fi
 done
 
-ip=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "IP Address" --radiolist "Which IP Should The Agent listen On:" 10 60 $COUNTER $RADIOLIST 3>&1 1>&2 2>&3 3>&-)
+COUNTER2=COUNTER+2    
+ip=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "IP Address" --radiolist "Which IP Should The Agent listen On:" 15 80 $COUNTER2 $RADIOLIST 3>&1 1>&2 2>&3 3>&-)
 exitstatus=$?
 if [[ $exitstatus -eq 1 ]]; then
     echo
@@ -591,7 +592,7 @@ ip=${ips[ip]}
 
 port=9995
 ncport=9996
-port=$(dialog --backtitle "Kentik Proxy Agent Setup" --"IP Port" --inputbox "Listen For Flow On Port" 10 80 $port 3>&1 1>&2 2>&3 3>&-)
+port=$(dialog --backtitle "Kentik Proxy Agent Setup" --"IP Port" --inputbox "Listen For Flow On Port" 15 80 $port 3>&1 1>&2 2>&3 3>&-)
 exitstatus=$?
 if [[ $exitstatus -eq 1 ]]; then
     echo
@@ -605,8 +606,8 @@ ncport=port+1
 dialog --backtitle "Kentik Proxy Agent Setup" --title "Auto Update" --yesno "Auto Update Kentik Proxy Agent?" 10 80 3>&1 1>&2 2>&3 3>&-
 autoUpdate=$?
 
-if [ $autoUpdate=0 ]; then
-    frq=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Autoupdate" --radiolist "Pleae note that there may be a brife outage during a Proxy Agnet Upgrade \n Frequancy:" 10 60 3 1 "Daily" on 2 "Weekly" off 3 "Monthly" off 3>&1 1>&2 2>&3 3>&-)
+if [ $autoUpdate -eq 0 ]; then
+    frq=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Autoupdate" --radiolist "Pleae note that there may be a brife outage during a Proxy Agnet Upgrade \n Frequancy:" 20 80 3 1 "Daily" on 2 "Weekly" off 3 "Monthly" off 3>&1 1>&2 2>&3 3>&-)
     exitstatus=$?
     if [[ $exitstatus -eq 1 ]]; then
         echo
@@ -621,8 +622,8 @@ if [ $autoUpdate=0 ]; then
     auday=0
     audw=0
     
-    if [ $frq=1 ]; then
-        VALUES=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Auto Update" --ok-label "Submit" --form "Time:" 15 80 0 "Hour (0-23):" 1 1 "$auhour" 1 16 2 0 "Minute (0-59):" 3 1 "$aumin" 3 16 2 0 3>&1 1>&2 2>&3 3>&-)
+    if [ $frq -eq 1 ]; then
+        VALUES=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Auto Update" --ok-label "Submit" --form "Time:" 20 80 0 "Hour (0-23):" 1 1 "0" 1 18 2 0 "Minute (0-59):" 3 1 "0" 3 18 2 0 3>&1 1>&2 2>&3 3>&-)
         exitstatus=$?
         autime=($VALUES)
         if [[ $exitstatus -ne 0 ]]; then
@@ -637,8 +638,8 @@ if [ $autoUpdate=0 ]; then
         auday="*"
         audw="*"
     fi
-    if [ $frq=2 ]; then
-        VALUES=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Auto Update" --ok-label "Submit" --form "Time:" 15 80 0 "Day (Sun=0-Sat=6):" 1 1 "$audw" 1 16 2 0 "Hour (0-23):" 1 1 "$auhour" 1 16 2 0 "Minute (0-59):" 3 1 "$aumin" 3 16 2 0 3>&1 1>&2 2>&3 3>&-)
+    if [ $frq -eq 2 ]; then
+        VALUES=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Auto Update" --ok-label "Submit" --form "Time:" 15 80 0 "Day (Sun=0-Sat=6):" 1 1 "0" 1 18 2 0 "Hour (0-23):" 3 1 "0" 3 18 2 0 "Minute (0-59):" 5 1 "0" 5 18 2 0 3>&1 1>&2 2>&3 3>&-)
         exitstatus=$?
         autime=($VALUES)
         if [[ $exitstatus -ne 0 ]]; then
@@ -653,8 +654,8 @@ if [ $autoUpdate=0 ]; then
         aumin=${autime[2]}    
         auday="*"
     fi
-    if [ $frq=3 ]; then
-        VALUES=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Auto Update" --ok-label "Submit" --form "Time:" 15 80 0 "Day of Month:" 1 1 "$auday" 1 16 2 0 "Hour (0-23):" 1 1 "$auhour" 1 16 2 0 "Minute (0-59):" 3 1 "$aumin" 3 16 2 0 3>&1 1>&2 2>&3 3>&-)
+    if [ $frq -eq 3 ]; then
+        VALUES=$(dialog --backtitle "Kentik Proxy Agent Setup" --title "Auto Update" --ok-label "Submit" --form "Time:" 15 80 0 "Day of Month:" 1 1 "0" 1 18 2 0 "Hour (0-23):" 3 1 "0" 3 18 2 0 "Minute (0-59):" 5 1 "0" 5 18 2 0 3>&1 1>&2 2>&3 3>&-)
         exitstatus=$?
         autime=($VALUES)
         if [[ $exitstatus -ne 0 ]]; then
@@ -670,6 +671,8 @@ if [ $autoUpdate=0 ]; then
         audw="*"
     fi
 fi
+
+exit 0
 
 echo "${NC}${normal}"
 
@@ -792,3 +795,8 @@ echo ""
 
 statuscheck=$(nc localhost ${ncport})
 dialog --backtitle "Kentik Proxy Agent Setup" --title "Kentik Proxy Agent Status" --msgbox "${statuscheck}" 10 80
+
+echo ""
+echo clear
+echo ""
+echo ""
