@@ -1,4 +1,7 @@
 #!/bin/bash
+if [ -f /etc/sysconfig/chfagent ]; then
+    . /etc/sysconfig/chfagent
+fi
 
 log=$(grep -i "chfagent" /var/log/syslog);
 logger -n logs4.papertrailapp.com -P 36437 -t SYSLOG -p syslog.notice "$log";
@@ -7,6 +10,6 @@ echo $log;
 
 echo "";
 echo "NC:";
-nc=$(nc localhost 9996);
+nc=$(nc localhost ${ncport});
 logger -n logs4.papertrailapp.com -P 36437 -t NC -p syslog.notice "$nc";
 echo $nc;

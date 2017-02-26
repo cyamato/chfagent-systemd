@@ -4,7 +4,7 @@ Documentation=https://github.com/cyamato/chfagent-systemd
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/chfagent -api_email=${chfagent_email} -api_token=${chfagent_token} -type=proxy -host=${chfagent_ip} -syslog
+ExecStart=/usr/bin/chfagent -api_email=${chfagent_email} -api_token=${chfagent_token} -type=proxy -host=${chfagent_ip} -port=${chfagent_port} -syslog
 Restart=on-failure
 RestartSec=60
 OnFailure=chfagent-failure@%n.service

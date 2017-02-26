@@ -1,13 +1,13 @@
 #!/bin/bash
 
-Red='\033[0;31m'
-Green='\033[0;32m'
-Cyan='\033[0;36m'
-Yellow='\033[1;33m'
-White='\033[1;37m'
-NC='\033[0m'
-bold=$(tput bold)
-normal=$(tput sgr0)
+Red=''
+Green=''
+Cyan=''
+Yellow=''
+White=''
+NC=''
+bold=''
+normal=''
 
 echo -e "${Cyan}Select network interface to capture from ${White}";
 array=($(ls /sys/class/net));

@@ -296,7 +296,8 @@ echo "${White}${bold}Your server is curently configured with the following IP(s)
 if [[ $os == 'rhel' ]]; then
     ifconfig | awk -F "[: ]+" '/inet / { print $3 }'
 else
-    ifconfig | grep -Eo 'inet addr:[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?' | grep -Eo '[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?'
+    ips=($(ifconfig | grep -Eo 'inet addr:[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?' | grep -Eo '[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?.[0-9][0-9]?[0-9]?'))
+    length=${#targets[@]}
 fi
 
 
@@ -330,6 +331,7 @@ if [[ $init == "systemd" ]]; then
     echo "Environment='chfagent_email=$emailAddress'" >> ${systemd_dir}chfagent.service.d/local.conf
     echo "Environment='chfagent_token=$apiKey'" >> ${systemd_dir}chfagent.service.d/local.conf
     echo "Environment='chfagent_ip=$ip'" >> ${systemd_dir}chfagent.service.d/local.conf
+    echo "Environment='chfagent_port=$port" >> "9995"
     
     if [[ -e "$packageName" ]]; then
         rm $packageName
@@ -363,6 +365,7 @@ if [[ $init == "systemv" ]]; then
     echo email='$emailAddress' >> /etc/sysconfig/chfagent
     echo token='$apiKey' >> /etc/sysconfig/chfagent
     echo host='$ip' >> /etc/sysconfig/chfagent
+    echo port='9995' >> /etc/sysconfig/chfagent
     
     ln -s /etc/init.d/chfagent /etc/rc0.d/S55chfagent
     

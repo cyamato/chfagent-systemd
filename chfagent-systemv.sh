@@ -6,11 +6,12 @@
 /etc/init.d/functions
 
 [ -f /etc/sysconfig/chfagent ] && /etc/sysconfig/chfagent
+ncport=port+1
 
 start() {
         echo "Starting : chfagent"
         touch /var/lock/subsys/chfagent
-        chfagent -api_email=$email -api_token=$token -type='proxy' -host=$host -syslog &
+        chfagent -api_email=$email -api_token=$token -type='proxy' -host=$host -port=$port -syslog &
         return
 }
 stop() {
@@ -27,7 +28,7 @@ case "$1" in
         stop
         ;;
     status)
-        nc localhost 9996
+        nc localhost ${ncport}
         ;;
     logs)
         grep -i "chfagent" /var/log/syslog
